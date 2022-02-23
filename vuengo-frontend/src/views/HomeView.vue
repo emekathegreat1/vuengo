@@ -139,8 +139,8 @@ export default {
       }
     },
     setStatus(task_id, status) {
-      const task = this.task.filter((task) => task.id === task_id)[0];
-      const description = !task.description;
+      const task = this.tasks.filter((task) => task.id === task_id)[0];
+      const description = task.description;
 
       axios({
         method: "put",
