@@ -4,9 +4,7 @@
     <router-link to="/about">About</router-link>
   </nav>
   <router-view />
-  <router-link to="/">
-    <button class="button is-success">Welcome</button>
-  </router-link>
+  <router-link to="/"> </router-link>
 </template>
 
 <style lang="scss">

@@ -1,9 +1,9 @@
 <template>
   <div class="home">
-    <h1 class="title">Vuengo</h1>
+    <h1 class="title is-1 is-spaced">Vuengo</h1>
     <hr />
-    <div class="columns">
-      <div class="coulmn is-3 is-offset-3">
+    <div class="column is-full">
+      <div class="">
         <form v-on:submit.prevent="addTask">
           <h2 class="subtitle">Add task</h2>
 
@@ -35,50 +35,46 @@
       </div>
     </div>
 
-    <div class="column is-half">
-      <div class="column is-6">
-        <h2 class="subtitle">To do</h2>
-      </div>
-      <div class="todo">
-        <div
-          class="card"
-          v-for="task in tasks"
-          v-if="task.status === 'todo'"
-          v-bind:key="task.id"
-        >
-          <div class="card-content">{{ task.description }}</div>
-
-          <footer class="card-footer">
-            <a
-              href=""
-              class="card-footer-item"
-              @click="setStatus(task.id, 'done')"
-              >Done</a
-            >
-          </footer>
+    <div class="tile is-ancestor">
+      <div class="tile is-parent is-6">
+        <div class="todo tile is-child">
+          <h2 class="subtitle is-2">To do</h2>
+          <div class="card" v-for="task in tasks" v-bind:key="task.id">
+            <div v-if="task.status === 'todo'">
+              <div class="card-content">
+                {{ task.description }}
+              </div>
+              <footer class="card-footer">
+                <a
+                  href=""
+                  class="card-footer-item"
+                  @click="setStatus(task.id, 'done')"
+                  >Done</a
+                >
+              </footer>
+            </div>
+          </div>
         </div>
       </div>
-      <div class="column is-6">
-        <h2 class="subtitle">Done</h2>
-      </div>
+      <div class="tile is-parent is-6">
+        <div class="done tile is-child">
+          <h2 class="subtitle is-2">Done</h2>
 
-      <div class="done">
-        <div
-          class="card"
-          v-for="task in tasks"
-          v-if="task.status === 'done'"
-          v-bind:key="task.id"
-        >
-          <div class="card-content">{{ task.description }}</div>
-
-          <footer class="card-footer">
-            <a
-              href=""
-              class="card-footer-item"
-              @click="setStatus(task.id, 'todo')"
-              >Todo</a
-            >
-          </footer>
+          <div class="card" v-for="task in tasks" v-bind:key="task.id">
+            <div v-if="task.status === 'done'">
+              <div class="card-content">
+                {{ task.description }}
+              </div>
+              <footer class="card-footer">
+                <a
+                  href=""
+                  class="card-footer-item"
+                  @click="setStatus(task.id, 'todo')"
+                  >Todo</a
+                >
+              </footer>
+            </div>
+          </div>
         </div>
       </div>
     </div>
@@ -144,10 +140,10 @@ export default {
     },
     setStatus(task_id, status) {
       const task = this.task.filter((task) => task.id === task_id)[0];
-      const description = task.description;
+      const description = !task.description;
 
       axios({
-        methods: "put",
+        method: "put",
         url: "http://127.0.0.1:8000/tasks/" + task_id + "/",
         headers: {
           "Content-Type": "application/json",
@@ -185,6 +181,20 @@ select {
 .columns {
   display: flex;
   flex-direction: column;
+  justify-content: center;
+  align-items: center;
+}
+
+.title {
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+  align-items: center;
+}
+
+.subtitle {
+  display: flex;
+  flex-direction: row;
   justify-content: center;
   align-items: center;
 }
