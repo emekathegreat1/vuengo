@@ -39,7 +39,13 @@
       <div class="tile is-parent is-6">
         <div class="todo tile is-child">
           <h2 class="subtitle is-2">To do</h2>
-          <div class="card" v-for="task in tasks" v-bind:key="task.id">
+          <div
+            class="card"
+            v-for="task in tasks"
+            v-bind:visibleTasks="visibleTasks"
+            v-bind:currentPage="currentPage"
+            v-bind:key="task.id"
+          >
             <div v-if="task.status === 'todo'">
               <div class="card-content">
                 {{ task.description }}
@@ -60,7 +66,13 @@
         <div class="done tile is-child">
           <h2 class="subtitle is-2">Done</h2>
 
-          <div class="card" v-for="task in tasks" v-bind:key="task.id">
+          <div
+            class="card"
+            v-for="task in tasks"
+            v-bind:visibleTasks="visibleTasks"
+            v-bind:currentPage="currentPage"
+            v-bind:key="task.id"
+          >
             <div v-if="task.status === 'done'">
               <div class="card-content">
                 {{ task.description }}
@@ -77,6 +89,7 @@
           </div>
         </div>
       </div>
+      <div class="btnContainer"></div>
     </div>
   </div>
 </template>
@@ -91,6 +104,9 @@ export default {
       tasks: [],
       description: "",
       status: "todo",
+      currentPage: 0,
+      pageSize: 3,
+      visibleTasks: [],
     };
   },
   mounted() {
@@ -119,6 +135,19 @@ export default {
           auth: {
             username: "admin",
             password: "vuengoadmin",
+          },
+          getBtns() {
+            const btnContainer = document.querySelector(".btnContainer");
+            console.log(btnContainer);
+            // btnContainer.innerHTML += `
+            //   <p>PAGE ${this.currentPage} OF </p>
+            //   <button class="prevBtn"><i class="fas fa-angle-left"></i></button>
+            //   <button class="prevBtn"><p id="state_page_1">${this.currentPage}</p></button>
+            //   <button class="nextBtn">
+            //     <p id="state_page_2"></p>
+            //   </button>
+            //   <button class="nextBtn"><i class="fas fa-angle-right"></i></button>
+            // `;
           },
         })
           .then((response) => {
@@ -159,6 +188,19 @@ export default {
       }).then(() => {
         task.status = status;
       });
+      console.log(this.visibleTasks, this.currentPage);
+    },
+    updatePage(pageNumber) {
+      this.currentPage = pageNumber;
+    },
+    updateVisibleTasks() {
+      this.visibleTasks = this.tasks.slice(
+        this.currentPage * this.pageSize,
+        this.currentPage * this.pageSize + this.pageSize
+      );
+      if (this.visibleTasks.length == 0 && this.currentPage > 0) {
+        this.updatePage(this.currentPage - 1);
+      }
     },
   },
 };
